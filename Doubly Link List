@@ -1,0 +1,183 @@
+#include <iostream>
+using namespace std;
+
+class Node {
+public:
+    int data;
+    Node* next;
+    Node* prev;
+    Node(int val) {
+        data = val;
+        next = prev = NULL;
+    }
+};
+
+void Insert_At_Start(Node* &head, Node* &tail, int val) {
+    Node* temp = new Node(val);
+    if (head == NULL) {
+        head = tail = temp;
+    } else {
+        head->prev = temp;
+        temp->next = head;
+        head = temp;
+    }
+}
+
+void Insert_At_End(Node* &head, Node* &tail, int val) {
+    Node* temp = new Node(val);
+    if (tail == NULL) {
+        head = tail = temp;
+    } else {
+        tail->next = temp;
+        temp->prev = tail;
+        tail = temp;
+    }
+}
+
+void Insert_At_Position(Node* &head, Node* &tail, int val, int pos) {
+    Node* temp = new Node(val);
+    if (pos == 0 || head == NULL) {
+        Insert_At_Start(head, tail, val);
+        return;
+    }
+    Node* curr = head;
+    int count = 0;
+    while (count < pos - 1 && curr->next != NULL) {
+        curr = curr->next;
+        count++;
+    }
+    if (curr->next == NULL) {
+        Insert_At_End(head, tail, val);
+    } else {
+        temp->next = curr->next;
+        curr->next->prev = temp;
+        curr->next = temp;
+        temp->prev = curr;
+    }
+}
+
+void Delete_At_Start(Node* &head, Node* &tail) {
+    if (head == NULL) return;
+    Node* temp = head;
+    if (head == tail) {
+        head = tail = NULL;
+    } else {
+        head = head->next;
+        head->prev = NULL;
+    }
+    delete temp;
+}
+
+void Delete_At_End(Node* &head, Node* &tail) {
+    if (tail == NULL) return;
+    Node* temp = tail;
+    if (head == tail) {
+        head = tail = NULL;
+    } else {
+        tail = tail->prev;
+        tail->next = NULL;
+    }
+    delete temp;
+}
+
+void Delete_At_Position(Node* &head, Node* &tail, int pos) {
+    if (head == NULL) return;
+    if (pos == 0) {
+        Delete_At_Start(head, tail);
+        return;
+    }
+    Node* curr = head;
+    int count = 0;
+    while (count < pos && curr != NULL) {
+        curr = curr->next;
+        count++;
+    }
+    if (curr == NULL) return;
+    if (curr == tail) {
+        Delete_At_End(head, tail);
+        return;
+    }
+    curr->prev->next = curr->next;
+    curr->next->prev = curr->prev;
+    delete curr;
+}
+
+void print(Node* head, Node* tail) {
+    cout << "Linked List: ";
+    Node* curr = head;
+    while (curr != NULL) {
+        cout << curr->data << " ";
+        curr = curr->next;
+    }
+    cout << endl;
+
+    if (head)
+        cout << "Head: " << head->data << endl;
+    else
+        cout << "Head: NULL" << endl;
+
+    if (tail)
+        cout << "Tail: " << tail->data << endl;
+    else
+        cout << "Tail: NULL" << endl;
+}
+
+int main() {
+    Node* head = NULL;
+    Node* tail = NULL;
+
+    int choice, val, pos;
+
+    do {
+        cout << "\nMenu:\n";
+        cout << "1. Insert at Start\n";
+        cout << "2. Insert at End\n";
+        cout << "3. Insert at Position\n";
+        cout << "4. Delete at Start\n";
+        cout << "5. Delete at End\n";
+        cout << "6. Delete at Position\n";
+        cout << "7. Print List\n";
+        cout << "0. Exit\n";
+        cout << "Enter your choice: ";
+        cin >> choice;
+
+        switch (choice) {
+            case 1:
+                cout << "Enter value: ";
+                cin >> val;
+                Insert_At_Start(head, tail, val);
+                break;
+            case 2:
+                cout << "Enter value: ";
+                cin >> val;
+                Insert_At_End(head, tail, val);
+                break;
+            case 3:
+                cout << "Enter position (0-based) and value: ";
+                cin >> pos >> val;
+                Insert_At_Position(head, tail, val, pos);
+                break;
+            case 4:
+                Delete_At_Start(head, tail);
+                break;
+            case 5:
+                Delete_At_End(head, tail);
+                break;
+            case 6:
+                cout << "Enter position (0-based): ";
+                cin >> pos;
+                Delete_At_Position(head, tail, pos);
+                break;
+            case 7:
+                print(head, tail);
+                break;
+            case 0:
+                cout << "Exiting...\n";
+                break;
+            default:
+                cout << "Invalid choice! Try again.\n";
+        }
+    } while (choice != 0);
+
+    return 0;
+}
