@@ -1,0 +1,173 @@
+#include <iostream>
+using namespace std;
+
+// Node class represents a single element in the stack
+class Node {
+public:
+    int data;      // Value stored in the node
+    Node* next;    // Pointer to the next node
+
+    // Constructor to initialize node with a value
+    Node(int val) {
+        data = val;
+        next = NULL;
+    }
+};
+
+// Stack class implementing stack using linked list
+class Stack {
+    Node* top;  // Points to the top node of the stack
+    int size;   // Keeps track of the number of elements
+
+public:
+    // Constructor initializes empty stack
+    Stack() {
+        top = NULL;
+        size = 0;
+    }
+
+    // Push a value onto the stack
+    void push(int val) {
+        Node* temp = new Node(val); // Create new node
+        if (temp == NULL) {
+            cout << "Stack overflow.\n";
+            return;
+        }
+        temp->next = top;  // New node points to current top
+        top = temp;        // New node becomes the new top
+        size++;
+        cout << "Pushed element: " << val << endl;
+    }
+
+    // Pop (remove) the top element from the stack
+    void pop() {
+        if (top == NULL) {
+            cout << "Stack underflow.\n"; // Empty stack
+            return;
+        }
+        Node* temp = top;         // Save the top node
+        cout << "Popped element: " << top->data << endl;
+        top = top->next;          // Move top to next node
+        delete temp;              // Free memory
+        size--;
+    }
+
+    // Peek at the top element without removing it
+    void peek() {
+        if (top == NULL) {
+            cout << "Stack is empty.\n";
+        } else {
+            cout << "Top element: " << top->data << endl;
+        }
+    }
+
+    // Check if the stack is empty
+    void empty() {
+        if (top == NULL) {
+            cout << "Stack is empty.\n";
+        } else {
+            cout << "Stack is not empty.\n";
+        }
+    }
+
+    // Get the number of elements in the stack
+    void issize() {
+        cout << "Current size of stack: " << size << endl;
+    }
+
+    // Display all elements in the stack from top to bottom
+    void display() {
+        if (top == NULL) {
+            cout << "Stack is empty.\n";
+            return;
+        }
+        cout << "Stack elements (top to bottom): ";
+        Node* temp = top;
+        while (temp != NULL) {
+            cout << temp->data << " "; // Print each node's data
+            temp = temp->next;
+        }
+        cout << endl;
+    }
+
+    // Reverse the stack using pointer manipulation
+    void reverse() {
+        Node* prev = NULL;
+        Node* current = top;
+        Node* next = NULL;
+
+        // Standard reverse linked list logic
+        while (current != NULL) {
+            next = current->next;   // Save next node
+            current->next = prev;   // Reverse pointer
+            prev = current;         // Move prev forward
+            current = next;         // Move current forward
+        }
+        top = prev; // Update top to new head
+        cout << "Stack reversed.\n";
+    }
+
+    // Destructor to free all allocated memory
+    ~Stack() {
+        while (top != NULL) {
+            Node* temp = top;
+            top = top->next;
+            delete temp;
+        }
+    }
+};
+
+// Main function to run the menu-driven stack operations
+int main() {
+    Stack s;        // Create a stack object
+    int choice, value;
+
+    do {
+        // Display the menu
+        cout << "\n--- Stack Menu ---\n";
+        cout << "1. Push\n";
+        cout << "2. Pop\n";
+        cout << "3. Peek\n";
+        cout << "4. Is Empty\n";
+        cout << "5. Stack Size\n";
+        cout << "6. Display Stack\n";
+        cout << "7. Reverse Stack\n";
+        cout << "8. Exit\n";
+        cout << "Enter your choice: ";
+        cin >> choice;
+
+        // Switch based on user's choice
+        switch (choice) {
+        case 1:
+            cout << "Enter value to push: ";
+            cin >> value;
+            s.push(value);
+            break;
+        case 2:
+            s.pop();
+            break;
+        case 3:
+            s.peek();
+            break;
+        case 4:
+            s.empty();
+            break;
+        case 5:
+            s.issize();
+            break;
+        case 6:
+            s.display();
+            break;
+        case 7:
+            s.reverse();
+            break;
+        case 8:
+            cout << "Exiting...\n";
+            break;
+        default:
+            cout << "Invalid choice! Try again.\n";
+        }
+    } while (choice != 8); // Loop until user chooses Exit
+
+    return 0;
+}
