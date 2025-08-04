@@ -1,0 +1,149 @@
+#include <iostream>
+using namespace std;
+
+class Stack {
+    int* arr;      // Array to store stack elements
+    int top;       // Index of top element
+    int capacity;  // Maximum size of stack
+
+public:
+    // Constructor to initialize stack
+    Stack(int size) {
+        capacity = size;
+        arr = new int[capacity];  // Allocate memory for array
+        top = -1;                 // Stack is initially empty
+    }
+
+    // Push an element onto the stack
+    void push(int val) {
+        if (top == capacity - 1) {
+            cout << "Stack overflow.\n";
+            return;
+        }
+        top++;
+        arr[top] = val;
+        cout << "Pushed element: " << val << endl;
+    }
+
+    // Pop (remove) the top element
+    void pop() {
+        if (top == -1) {
+            cout << "Stack underflow.\n";
+            return;
+        }
+        cout << "Popped element: " << arr[top] << endl;
+        top--;
+    }
+
+    // Peek at the top element
+    void peek() {
+        if (top == -1) {
+            cout << "Stack is empty.\n";
+        } else {
+            cout << "Top element: " << arr[top] << endl;
+        }
+    }
+
+    // Check if the stack is empty
+    void empty() {
+        if (top == -1) {
+            cout << "Stack is empty.\n";
+        } else {
+            cout << "Stack is not empty.\n";
+        }
+    }
+
+    // Get current number of elements
+    void issize() {
+        cout << "Current size of stack: " << top + 1 << endl;
+    }
+
+    // Display all elements in the stack
+    void display() {
+        if (top == -1) {
+            cout << "Stack is empty.\n";
+            return;
+        }
+        cout << "Stack elements (top to bottom): ";
+        for (int i = top; i >= 0; i--) {
+            cout << arr[i] << " ";
+        }
+        cout << endl;
+    }
+
+    // Reverse the stack using a temporary array
+    void reverse() {
+        if (top <= 0) {
+            cout << "Stack has 0 or 1 element, no need to reverse.\n";
+            return;
+        }
+        for (int i = 0; i <= top / 2; i++) {
+            swap(arr[i], arr[top - i]);
+        }
+        cout << "Stack reversed.\n";
+    }
+
+    // Destructor to free memory
+    ~Stack() {
+        delete[] arr;
+    }
+};
+
+// Main function to drive the stack program
+int main() {
+    int maxSize;
+    cout << "Enter maximum size of stack: ";
+    cin >> maxSize;
+
+    Stack s(maxSize);  // Create stack with given capacity
+    int choice, value;
+
+    do {
+        // Display menu
+        cout << "\n--- Stack Menu ---\n";
+        cout << "1. Push\n";
+        cout << "2. Pop\n";
+        cout << "3. Peek\n";
+        cout << "4. Is Empty\n";
+        cout << "5. Stack Size\n";
+        cout << "6. Display Stack\n";
+        cout << "7. Reverse Stack\n";
+        cout << "8. Exit\n";
+        cout << "Enter your choice: ";
+        cin >> choice;
+
+        // Perform selected operation
+        switch (choice) {
+        case 1:
+            cout << "Enter value to push: ";
+            cin >> value;
+            s.push(value);
+            break;
+        case 2:
+            s.pop();
+            break;
+        case 3:
+            s.peek();
+            break;
+        case 4:
+            s.empty();
+            break;
+        case 5:
+            s.issize();
+            break;
+        case 6:
+            s.display();
+            break;
+        case 7:
+            s.reverse();
+            break;
+        case 8:
+            cout << "Exiting...\n";
+            break;
+        default:
+            cout << "Invalid choice! Try again.\n";
+        }
+    } while (choice != 8);  // Loop until user chooses to exit
+
+    return 0;
+}
