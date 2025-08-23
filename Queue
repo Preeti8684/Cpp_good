@@ -1,0 +1,150 @@
+#include <iostream>
+#include <algorithm>  // for sort
+using namespace std;
+
+class Queue {
+    int *arr;
+    int front;
+    int rear;
+    int size;
+
+public:
+    Queue(int n) {
+        arr = new int[n];
+        size = n;
+        front = -1;
+        rear = -1;
+    }
+
+    bool IsEmpty() {
+        return front == -1;
+    }
+
+    bool IsFull() {
+        return rear == size - 1;
+    }
+
+    void push(int x) {
+        if (IsFull()) {
+            cout << "Queue overflow! Cannot insert " << x << endl;
+            return;
+        }
+        if (IsEmpty()) {
+            front = rear = 0;
+        } else {
+            rear++;
+        }
+        arr[rear] = x;
+        cout << "Inserted: " << x << endl;
+    }
+
+    void pop() {
+        if (IsEmpty()) {
+            cout << "Queue underflow! Nothing to delete." << endl;
+            return;
+        }
+        cout << "Deleted element: " << arr[front] << endl;
+        if (front == rear) {
+            front = rear = -1; // queue becomes empty
+        } else {
+            front++;
+        }
+    }
+
+    int start() {
+        if (IsEmpty()) {
+            cout << "Queue is empty." << endl;
+            return -1;
+        }
+        return arr[front];
+    }
+
+    int end() {
+        if (IsEmpty()) {
+            cout << "Queue is empty." << endl;
+            return -1;
+        }
+        return arr[rear];
+    }
+
+    int count() {
+        if (IsEmpty()) return 0;
+        return (rear - front + 1);
+    }
+
+    void sortQueue() {
+        if (IsEmpty()) {
+            cout << "Queue is empty. Cannot sort." << endl;
+            return;
+        }
+        // Sort only the valid portion of the array
+        sort(arr + front, arr + rear + 1);
+        cout << "Queue sorted successfully." << endl;
+    }
+
+    void print() {
+        if (IsEmpty()) {
+            cout << "Queue is empty." << endl;
+            return;
+        }
+        cout << "Queue elements: ";
+        for (int i = front; i <= rear; i++) {
+            cout << arr[i] << " ";
+        }
+        cout << endl;
+    }
+};
+
+int main() {
+    int choice, val, n;
+    cout << "Enter size of queue: ";
+    cin >> n;
+    Queue q1(n);
+
+    do {
+        cout << "\n--- Queue Menu ---" << endl;
+        cout << "1. Push" << endl;
+        cout << "2. Pop" << endl;
+        cout << "3. Display Queue" << endl;
+        cout << "4. Peek (Front element)" << endl;
+        cout << "5. Rear element" << endl;
+        cout << "6. Count elements" << endl;
+        cout << "7. Sort Queue" << endl;
+        cout << "8. Exit" << endl;
+        cout << "Enter your choice: ";
+        cin >> choice;
+
+        switch (choice) {
+        case 1:
+            cout << "Enter value to insert: ";
+            cin >> val;
+            q1.push(val);
+            break;
+        case 2:
+            q1.pop();
+            break;
+        case 3:
+            q1.print();
+            break;
+        case 4:
+            cout << "Front element: " << q1.start() << endl;
+            break;
+        case 5:
+            cout << "Rear element: " << q1.end() << endl;
+            break;
+        case 6:
+            cout << "Total elements: " << q1.count() << endl;
+            break;
+        case 7:
+            q1.sortQueue();
+            break;
+        case 8:
+            cout << "Exiting program..." << endl;
+            break;
+        default:
+            cout << "Invalid choice! Try again." << endl;
+        }
+    } while (choice != 8);
+
+    return 0;
+}
