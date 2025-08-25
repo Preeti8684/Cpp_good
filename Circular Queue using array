@@ -1,0 +1,164 @@
+#include <iostream>
+#include <algorithm>  // for sort()
+using namespace std;
+
+class CirQueue {
+    int *arr;
+    int front;
+    int rear;
+    int size;
+
+public:
+    CirQueue(int n) {
+        arr = new int[n];
+        size = n;
+        front = -1;
+        rear = -1;
+    }
+
+    bool IsEmpty() {
+        return front == -1;
+    }
+
+    bool IsFull() {
+        return (rear + 1) % size == front;
+    }
+
+    void push(int x) {
+        if (IsFull()) {
+            cout << "Queue overflow: no space!" << endl;
+            return;
+        }
+        if (IsEmpty()) {
+            front = rear = 0;
+        } else {
+            rear = (rear + 1) % size;
+        }
+        arr[rear] = x;
+        cout << x << " inserted into queue." << endl;
+    }
+
+    void pop() {
+        if (IsEmpty()) {
+            cout << "Queue underflow." << endl;
+            return;
+        }
+        cout << "Deleted element: " << arr[front] << endl;
+        if (front == rear) {
+            front = rear = -1; // empty
+        } else {
+            front = (front + 1) % size;
+        }
+    }
+
+    int start() {
+        if (IsEmpty()) {
+            cout << "Queue is empty." << endl;
+            return -1;
+        }
+        return arr[front];
+    }
+
+    int end() {
+        if (IsEmpty()) {
+            cout << "Queue is empty." << endl;
+            return -1;
+        }
+        return arr[rear];
+    }
+
+    void print() {
+        if (IsEmpty()) {
+            cout << "Queue is empty" << endl;
+            return;
+        }
+        cout << "Elements present:" << endl;
+        int i = front;
+        while (true) {
+            cout << arr[i] << " ";
+            if (i == rear) break;
+            i = (i + 1) % size;
+        }
+        cout << endl;
+    }
+
+    void sortQueue() {
+        if (IsEmpty()) {
+            cout << "Queue is empty, nothing to sort." << endl;
+            return;
+        }
+
+        // Copy elements into temp array
+        int temp[size];
+        int count = 0;
+        int i = front;
+        while (true) {
+            temp[count++] = arr[i];
+            if (i == rear) break;
+            i = (i + 1) % size;
+        }
+
+        // Sort elements
+        std::sort(temp, temp + count);
+
+        // Display sorted queue
+        cout << "Sorted elements: ";
+        for (int j = 0; j < count; j++) {
+            cout << temp[j] << " ";
+        }
+        cout << endl;
+    }
+};
+
+int main() {
+    int n, choice, val;
+    cout << "Enter size of Circular Queue: ";
+    cin >> n;
+
+    CirQueue q(n);
+
+    do {
+        cout << "\n--- Circular Queue Menu ---\n";
+        cout << "1. Insert (Push)\n";
+        cout << "2. Delete (Pop)\n";
+        cout << "3. Display Queue\n";
+        cout << "4. Peek Front\n";
+        cout << "5. Peek Rear\n";
+        cout << "6. Sort Queue\n";
+        cout << "7. Exit\n";
+        cout << "Enter your choice: ";
+        cin >> choice;
+
+        switch (choice) {
+            case 1:
+                cout << "Enter value to insert: ";
+                cin >> val;
+                q.push(val);
+                break;
+            case 2:
+                q.pop();
+                break;
+            case 3:
+                q.print();
+                break;
+            case 4:
+                val = q.start();
+                if (val != -1) cout << "Front element is: " << val << endl;
+                break;
+            case 5:
+                val = q.end();
+                if (val != -1) cout << "Rear element is: " << val << endl;
+                break;
+            case 6:
+                q.sortQueue();
+                break;
+            case 7:
+                cout << "Exiting program..." << endl;
+                break;
+            default:
+                cout << "Invalid choice! Try again." << endl;
+        }
+    } while (choice != 7);
+
+    return 0;
+}
