@@ -1,0 +1,170 @@
+#include <iostream>
+using namespace std;
+
+class Node {
+public:
+    int data;
+    Node* next;
+
+    Node(int n) {
+        data = n;
+        next = NULL;
+    }
+};
+
+class Queue {
+    Node* front;
+    Node* rear;
+    int size;   // max capacity
+
+public:
+    Queue() {
+        front = rear = NULL;
+        cout << "Enter the size of queue: ";
+        cin >> size;
+    }
+
+    bool IsEmpty() {
+        return front == NULL;
+    }
+
+    int currentCount() {
+        int cnt = 0;
+        Node* temp = front;
+        while (temp != NULL) {
+            cnt++;
+            temp = temp->next;
+        }
+        return cnt;
+    }
+
+    bool IsFull() {
+        return currentCount() == size;
+    }
+
+    void push(int n) {
+        if (IsFull()) {
+            cout << "Queue is full." << endl;
+            return;
+        }
+        Node* temp = new Node(n);
+        if (IsEmpty()) {
+            front = rear = temp;
+        } else {
+            rear->next = temp;
+            rear = temp;
+        }
+        cout << n << " pushed into queue.\n";
+    }
+
+    void pop() {
+        if (IsEmpty()) {
+            cout << "Queue is empty." << endl;
+            return;
+        }
+        Node* temp = front;
+        cout << "Popped: " << front->data << endl;
+        front = front->next;
+        delete temp;
+        if (front == NULL) rear = NULL;
+    }
+
+    void start() {
+        if (!IsEmpty())
+            cout << "Front element: " << front->data << endl;
+        else
+            cout << "Queue is empty." << endl;
+    }
+
+    void end() {
+        if (!IsEmpty())
+            cout << "Rear element: " << rear->data << endl;
+        else
+            cout << "Queue is empty." << endl;
+    }
+
+    void size_() {
+        cout << "Current size: " << currentCount() << "/" << size << endl;
+    }
+
+    void display() {
+        if (IsEmpty()) {
+            cout << "Queue is empty." << endl;
+            return;
+        }
+        cout << "Queue elements: ";
+        Node* temp = front;
+        while (temp != NULL) {
+            cout << temp->data << " ";
+            temp = temp->next;
+        }
+        cout << endl;
+    }
+
+    void sort() {
+        if (IsEmpty()) {
+            cout << "Queue is empty." << endl;
+            return;
+        }
+        for (Node* i = front; i != NULL; i = i->next) {
+            for (Node* j = i->next; j != NULL; j = j->next) {
+                if (i->data > j->data) {
+                    swap(i->data, j->data);
+                }
+            }
+        }
+        cout << "Queue sorted.\n";
+    }
+};
+
+int main() {
+    Queue q;
+    int choice, val;
+
+    do {
+        cout << "\n--- Queue Menu ---\n";
+        cout << "1. Push\n";
+        cout << "2. Pop\n";
+        cout << "3. Show Front (Start)\n";
+        cout << "4. Show Rear (End)\n";
+        cout << "5. Show Size\n";
+        cout << "6. Display Queue\n";
+        cout << "7. Sort Queue\n";
+        cout << "0. Exit\n";
+        cout << "Enter your choice: ";
+        cin >> choice;
+
+        switch (choice) {
+        case 1:
+            cout << "Enter value to push: ";
+            cin >> val;
+            q.push(val);
+            break;
+        case 2:
+            q.pop();
+            break;
+        case 3:
+            q.start();
+            break;
+        case 4:
+            q.end();
+            break;
+        case 5:
+            q.size_();
+            break;
+        case 6:
+            q.display();
+            break;
+        case 7:
+            q.sort();
+            break;
+        case 0:
+            cout << "Exiting...\n";
+            break;
+        default:
+            cout << "Invalid choice!\n";
+        }
+    } while (choice != 0);
+
+    return 0;
+}
